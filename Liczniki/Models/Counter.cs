@@ -13,7 +13,6 @@
             Value = initialValue;
         }
 
-        // Resetowanie licznika do wartości początkowej
         public void Reset()
         {
             Value = InitialValue;

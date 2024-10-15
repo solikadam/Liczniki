@@ -21,7 +21,6 @@ namespace Liczniki
             CountersCollectionView.ItemsSource = Counters;
         }
 
-        // Dodawanie nowego licznika
         private void OnAddCounterClicked(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(CounterNameEntry.Text) && int.TryParse(CounterInitialValueEntry.Text, out int initialValue))
@@ -29,16 +28,13 @@ namespace Liczniki
                 var newCounter = new Counter(CounterNameEntry.Text, initialValue);
                 Counters.Add(newCounter);
 
-                // Zapisanie zmian do pliku
                 _counterService.SaveCounters(Counters);
 
-                // Wyczyszczenie pól formularza
                 CounterNameEntry.Text = string.Empty;
                 CounterInitialValueEntry.Text = string.Empty;
             }
         }
 
-        // Obsługa kliknięcia przycisku "-"
         private void OnMinusClicked(object sender, EventArgs e)
         {
             var button = sender as Button;
@@ -51,7 +47,6 @@ namespace Liczniki
             }
         }
 
-        // Obsługa kliknięcia przycisku "+"
         private void OnPlusClicked(object sender, EventArgs e)
         {
             var button = sender as Button;
@@ -64,7 +59,6 @@ namespace Liczniki
             }
         }
 
-        // Obsługa resetowania licznika
         private void OnResetClicked(object sender, EventArgs e)
         {
             var button = sender as Button;

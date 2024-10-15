@@ -4,14 +4,19 @@
              xmlns:local="clr-namespace:Liczniki"
              x:Class="Liczniki.MainPage">
 
-    <VerticalStackLayout Padding="20">
+    <VerticalStackLayout Padding="20" BackgroundColor="#282828">
 
-        <Label Text="Aplikacja Liczniki" FontSize="24" HorizontalOptions="Center" />
+        <Label Text="Aplikacja Liczniki" 
+               FontSize="24" 
+               Margin="20" 
+               HorizontalOptions="Center" 
+               TextColor="White" 
+               FontAttributes="Bold"/>
 
         <!-- Formularz dodawania nowego licznika -->
-        <HorizontalStackLayout>
-            <Entry x:Name="CounterNameEntry" Placeholder="Nazwa licznika" WidthRequest="200"/>
-            <Entry x:Name="CounterInitialValueEntry" Placeholder="Wartość początkowa" Keyboard="Numeric" WidthRequest="100"/>
+        <HorizontalStackLayout BackgroundColor="Black" Spacing="5">
+            <Entry x:Name="CounterNameEntry" Placeholder="Nazwa licznika" WidthRequest="300"/>
+            <Entry x:Name="CounterInitialValueEntry" Placeholder="Wartość początkowa" Keyboard="Numeric" WidthRequest="200"/>
             <Button Text="Dodaj licznik" Clicked="OnAddCounterClicked"/>
         </HorizontalStackLayout>
 
@@ -19,11 +24,11 @@
         <CollectionView x:Name="CountersCollectionView">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Horizontal" Padding="10">
-                        <Label Text="{Binding Name}" FontSize="18" VerticalOptions="Center"/>
-                        <Button Text="-" Clicked="OnMinusClicked" CommandParameter="{Binding .}" />
-                        <Label Text="{Binding Value}" FontSize="18" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="50" HorizontalTextAlignment="Center"/>
-                        <Button Text="+" Clicked="OnPlusClicked" CommandParameter="{Binding .}" />
+                    <StackLayout Orientation="Horizontal" Padding="10"  BackgroundColor="Black">
+                        <Button Text="-" Clicked="OnMinusClicked" CommandParameter="{Binding .}" WidthRequest="100" />
+                        <Label Text="{Binding Name}" FontSize="18" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="200" TextColor="White" HorizontalTextAlignment="Center"/>
+                        <Label Text="{Binding Value}" FontSize="18" VerticalOptions="Center" TextColor="White" HorizontalOptions="Center" WidthRequest="50" HorizontalTextAlignment="Center"/>
+                        <Button Text="+" Clicked="OnPlusClicked" CommandParameter="{Binding .}" WidthRequest="100"/>
                         <Button Text="Reset" Clicked="OnResetClicked" CommandParameter="{Binding .}" />
                     </StackLayout>
                 </DataTemplate>

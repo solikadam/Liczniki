@@ -11,11 +11,9 @@ namespace Liczniki.Services
 
         public CounterService()
         {
-            // Ścieżka do pliku tekstowego
             filePath = Path.Combine(FileSystem.AppDataDirectory, "counters.txt");
         }
 
-        // Zapis liczników do pliku
         public void SaveCounters(ObservableCollection<Counter> counters)
         {
             using (StreamWriter writer = new StreamWriter(filePath, false))
@@ -27,7 +25,6 @@ namespace Liczniki.Services
             }
         }
 
-        // Odczyt liczników z pliku
         public ObservableCollection<Counter> LoadCounters()
         {
             var counters = new ObservableCollection<Counter>();
