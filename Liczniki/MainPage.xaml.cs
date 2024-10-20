@@ -1,74 +1,95 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Microsoft.Maui.Controls;
+﻿using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using Liczniki.Models;
-using Liczniki.Services;
 
-namespace Liczniki
+namespace Liczniki;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    public ObservableCollection<Counter> Counters { get; set; }
+    private string FileName => Path.Combine(FileSystem.AppDataDirectory, "counters.json");
+
+    public MainPage()
     {
-        public ObservableCollection<Counter> Counters { get; set; }
-        private CounterService _counterService;
+        InitializeComponent();
+        Counters = new ObservableCollection<Counter>();
+        LoadCounters();
+    }
 
-        public MainPage()
+    private async void LoadCounters()
+    {
+        if (File.Exists(FileName))
         {
-            InitializeComponent();
-
-            _counterService = new CounterService();
-            Counters = _counterService.LoadCounters();
-
-            CountersCollectionView.ItemsSource = Counters;
-        }
-
-        private void OnAddCounterClicked(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(CounterNameEntry.Text) && int.TryParse(CounterInitialValueEntry.Text, out int initialValue))
+            var json = await File.ReadAllTextAsync(FileName);
+            var counters = JsonSerializer.Deserialize<List<Counter>>(json);
+            if (counters != null)
             {
-                var newCounter = new Counter(CounterNameEntry.Text, initialValue);
-                Counters.Add(newCounter);
-
-                _counterService.SaveCounters(Counters);
-
-                CounterNameEntry.Text = string.Empty;
-                CounterInitialValueEntry.Text = string.Empty;
+                foreach (var counter in counters)
+                {
+                    Counters.Add(counter);
+                }
             }
         }
 
-        private void OnMinusClicked(object sender, EventArgs e)
+        // Dodaj licznik początkowy, jeśli go jeszcze nie ma
+        if (!Counters.Any(c => c.Name == "Licznik początkowy"))
         {
-            var button = sender as Button;
-            var counter = button.CommandParameter as Counter;
-
-            if (counter != null && counter.Value > 0)
-            {
-                counter.Value--;
-                _counterService.SaveCounters(Counters);
-            }
+            Counters.Add(new Counter("Licznik początkowy", 0));
+            SaveCounters();
         }
 
-        private void OnPlusClicked(object sender, EventArgs e)
-        {
-            var button = sender as Button;
-            var counter = button.CommandParameter as Counter;
+        CountersCollectionView.ItemsSource = Counters;
+    }
 
-            if (counter != null)
-            {
-                counter.Value++;
-                _counterService.SaveCounters(Counters);
-            }
+    private async void SaveCounters()
+    {
+        var json = JsonSerializer.Serialize(Counters.ToList());
+        await File.WriteAllTextAsync(FileName, json);
+    }
+
+    private void OnPlusClicked(object sender, EventArgs e)
+    {
+        var button = (Button)sender;
+        var counter = (Counter)button.CommandParameter;
+        counter.Value++;
+        SaveCounters();
+    }
+
+    private void OnMinusClicked(object sender, EventArgs e)
+    {
+        var button = (Button)sender;
+        var counter = (Counter)button.CommandParameter;
+        counter.Value--;
+        SaveCounters();
+    }
+
+    private async void OnShowAddCounterFormClicked(object sender, EventArgs e)
+    {
+        var addCounterPage = new AddCounterPage();
+        addCounterPage.CounterAdded += OnCounterAdded;
+        await Navigation.PushModalAsync(addCounterPage);
+    }
+
+    private void OnCounterAdded(object sender, string counterName)
+    {
+        if (counterName == "Licznik początkowy" && Counters.Any(c => c.Name == "Licznik początkowy"))
+        {
+            DisplayAlert("Błąd", "Licznik początkowy może być dodany tylko raz.", "OK");
+            return;
         }
 
-        private void OnResetClicked(object sender, EventArgs e)
-        {
-            var button = sender as Button;
-            var counter = button.CommandParameter as Counter;
+        var newCounter = new Counter(counterName, 0);
+        Counters.Add(newCounter);
+        SaveCounters();
+    }
 
-            if (counter != null)
-            {
-                counter.Reset();
-                _counterService.SaveCounters(Counters);
-            }
-        }
+    private void OnDeleteCounterClicked(object sender, EventArgs e)
+    {
+        var button = (Button)sender;
+        var counter = (Counter)button.CommandParameter;
+        Counters.Remove(counter);
+        SaveCounters();
     }
 }
