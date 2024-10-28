@@ -1,13 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Liczniki.AddCounterPage">
+             x:Class="Liczniki.AddCounterPage"
+             BackgroundColor="#282828">
 
-    <VerticalStackLayout Padding="20">
-        <Label Text="Dodaj nowy licznik" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center"/>
+    <StackLayout Padding="20">
+        <Label Text="Dodaj Licznik" 
+               FontSize="24" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Start" 
+               Margin="0,20,0,20" 
+               FontAttributes="Bold" 
+               TextColor="White"/>
 
-        <Entry x:Name="CounterNameEntry" Placeholder="Nazwa licznika" WidthRequest="200" HorizontalOptions="Center"/>
+        <Label Text="Nazwa licznika:" 
+               TextColor="White"/>
+        <Entry x:Name="CounterNameEntry" 
+               Placeholder="Wprowad� nazw�" 
+               BackgroundColor="#444444" 
+               TextColor="White" 
+               PlaceholderColor="Gray" 
+               Margin="0,5,0,15"/>
 
-        <Button Text="Dodaj licznik" Clicked="OnAddCounterClicked" HorizontalOptions="Center"/>
-    </VerticalStackLayout>
+        <Label Text="Warto�� pocz�tkowa:" 
+               TextColor="White"/>
+        <Entry x:Name="InitialValueEntry" 
+               Placeholder="0" 
+               Keyboard="Numeric" 
+               BackgroundColor="#444444" 
+               TextColor="White" 
+               PlaceholderColor="Gray" 
+               Margin="0,5,0,20"/>
 
+        <Button Text="Dodaj" 
+                Clicked="OnAddCounterClicked" 
+                BackgroundColor="#4CAF50" 
+                TextColor="White" 
+                HorizontalOptions="FillAndExpand" 
+                CornerRadius="10" 
+                Padding="10" />
+
+        <Button Text="Anuluj" 
+                Clicked="OnCancelClicked" 
+                BackgroundColor="#F44336" 
+                TextColor="White" 
+                HorizontalOptions="FillAndExpand" 
+                CornerRadius="10" 
+                Padding="10" 
+                Margin="0,10,0,0"/>
+    </StackLayout>
 </ContentPage>

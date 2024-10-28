@@ -1,28 +1,32 @@
-using System;
+using Microsoft.Maui.Controls;
 
 namespace Liczniki;
 
 public partial class AddCounterPage : ContentPage
 {
-    public event EventHandler<string> CounterAdded;
+    public event EventHandler<(string counterName, int initialValue)> CounterAdded;
 
     public AddCounterPage()
     {
         InitializeComponent();
     }
 
-    private async void OnAddCounterClicked(object sender, EventArgs e)
+    private void OnAddCounterClicked(object sender, EventArgs e)
     {
         var counterName = CounterNameEntry.Text;
-
-        if (string.IsNullOrWhiteSpace(counterName))
+        if (int.TryParse(InitialValueEntry.Text, out int initialValue))
         {
-            await DisplayAlert("B³¹d", "WprowadŸ nazwê licznika", "OK");
-            return;
+            CounterAdded?.Invoke(this, (counterName, initialValue));
+            Navigation.PopModalAsync();
         }
+        else
+        {
+            DisplayAlert("B³¹d", "Proszê wprowadziæ prawid³ow¹ wartoœæ pocz¹tkow¹.", "OK");
+        }
+    }
 
-        CounterAdded?.Invoke(this, counterName);
-        await Navigation.PopModalAsync();
+    private void OnCancelClicked(object sender, EventArgs e)
+    {
+        Navigation.PopModalAsync();
     }
 }
-

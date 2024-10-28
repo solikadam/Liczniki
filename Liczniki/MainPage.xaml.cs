@@ -1,8 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using Liczniki.Models;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using Liczniki.Models;
 
 namespace Liczniki;
 
@@ -16,6 +16,7 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         Counters = new ObservableCollection<Counter>();
         LoadCounters();
+        CountersCollectionView.ItemsSource = Counters;
     }
 
     private async void LoadCounters()
@@ -33,14 +34,11 @@ public partial class MainPage : ContentPage
             }
         }
 
-        // Dodaj licznik początkowy, jeśli go jeszcze nie ma
         if (!Counters.Any(c => c.Name == "Licznik początkowy"))
         {
             Counters.Add(new Counter("Licznik początkowy", 0));
             SaveCounters();
         }
-
-        CountersCollectionView.ItemsSource = Counters;
     }
 
     private async void SaveCounters()
@@ -72,15 +70,9 @@ public partial class MainPage : ContentPage
         await Navigation.PushModalAsync(addCounterPage);
     }
 
-    private void OnCounterAdded(object sender, string counterName)
+    private void OnCounterAdded(object sender, (string counterName, int initialValue) e)
     {
-        if (counterName == "Licznik początkowy" && Counters.Any(c => c.Name == "Licznik początkowy"))
-        {
-            DisplayAlert("Błąd", "Licznik początkowy może być dodany tylko raz.", "OK");
-            return;
-        }
-
-        var newCounter = new Counter(counterName, 0);
+        var newCounter = new Counter(e.counterName, e.initialValue);
         Counters.Add(newCounter);
         SaveCounters();
     }

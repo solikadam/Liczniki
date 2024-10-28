@@ -47,6 +47,8 @@ namespace Liczniki.Models
             Value = initialValue;
         }
 
+        public Counter() { }
+
         public void Reset()
         {
             Value = InitialValue;

@@ -4,12 +4,13 @@
              BackgroundColor="#282828">
 
     <StackLayout Padding="20">
-        <Label Text="Licznik Aplikacji" 
+        <Label Text="Lista Liczników" 
                FontSize="24" 
                HorizontalOptions="Center" 
                VerticalOptions="Start" 
                Margin="0,20,0,20" 
-               FontAttributes="Bold" />
+               FontAttributes="Bold" 
+               TextColor="White"/>
 
         <Button Text="Dodaj licznik" 
                 BackgroundColor="#4CAF50" 
@@ -34,12 +35,14 @@
                             <Label Text="{Binding Name}" 
                                    FontSize="18" 
                                    VerticalOptions="Center" 
-                                   HorizontalOptions="StartAndExpand" />
+                                   HorizontalOptions="StartAndExpand" 
+                                   TextColor="White"/>
                             <Label Text="{Binding Value}" 
                                    FontSize="18" 
                                    VerticalOptions="Center" 
                                    Margin="10,0"
-                                   HorizontalOptions="EndAndExpand" />
+                                   HorizontalOptions="EndAndExpand" 
+                                   TextColor="White"/>
                             <Button Text="+" 
                                     Clicked="OnPlusClicked" 
                                     CommandParameter="{Binding .}" 
