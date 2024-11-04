@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Liczniki.Models
 {
@@ -9,6 +10,9 @@ namespace Liczniki.Models
         private string _name;
         private int _value;
         private int _initialValue;
+
+        // Unikalne ID dla każdego obiektu
+        public Guid Id { get; private set; }
 
         public string Name
         {
@@ -40,14 +44,20 @@ namespace Liczniki.Models
             }
         }
 
+        // Konstruktor z generowaniem unikalnego ID
         public Counter(string name, int initialValue)
         {
+            Id = Guid.NewGuid(); // Generuje unikalne ID przy tworzeniu obiektu
             Name = name;
             InitialValue = initialValue;
             Value = initialValue;
         }
 
-        public Counter() { }
+        // Konstruktor bezparametrowy dla deserializacji
+        public Counter()
+        {
+            Id = Guid.NewGuid(); // Generuje unikalne ID przy tworzeniu obiektu
+        }
 
         public void Reset()
         {
